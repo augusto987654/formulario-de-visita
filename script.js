@@ -62,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextCardIndex = parseInt(button.dataset.card, 10);
             
             if (currentCardIndex === 0) {
-                 currentCardIndex = nextCardIndex;
-                 showCard(currentCardIndex);
-                 return;
+                currentCardIndex = nextCardIndex;
+                showCard(currentCardIndex);
+                return;
             }
             
             const currentCard = cards[currentCardIndex];
@@ -157,57 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // **NOVA LÓGICA DE ENVIO:** Agora o formulário envia os dados para o servidor Python
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const currentCard = cards[currentCardIndex];
-        const inputs = currentCard.querySelectorAll('[required]');
-        let isValid = true;
-        
-        inputs.forEach(input => {
-            if (!input.value) {
-                isValid = false;
-                input.style.border = '1px solid red';
-            } else {
-                input.style.border = '';
-            }
-        });
-
-        if (isValid) {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            // URL do seu servidor Python (para testes locais)
-            // Lembre-se de que, em produção, você precisará de um domínio real para o seu backend.
-            const pythonServerURL = 'http://127.0.0.1:5000/submit-form';
-
-            fetch(pythonServerURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Dados do formulário enviados para o servidor Python:', data);
-                    form.style.display = 'none';
-                    document.getElementById('card-4').style.display = 'block';
-                    progressDots.forEach(dot => dot.classList.remove('active'));
-                } else {
-                    alert('Houve um erro ao enviar o formulário. Por favor, tente novamente.');
-                    console.error('Erro no envio do formulário:', response);
-                }
-            })
-            .catch(error => {
-                alert('Houve um erro de conexão. Verifique se o servidor Python está rodando.');
-                console.error('Erro de conexão:', error);
-            });
-        } else {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-        }
-    });
+    // A lógica de envio via JavaScript foi removida.
+    // O formulário agora será enviado diretamente para o Google Forms pelo HTML.
 
     const homeButton = document.querySelector('.home-btn');
     if (homeButton) {
