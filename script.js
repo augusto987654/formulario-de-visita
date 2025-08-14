@@ -39,16 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicia mostrando o primeiro cartão (índice 0)
     showCard(currentCardIndex);
 
-    // **NOVA LÓGICA: Puxar a data atual**
+    // Lógica: Puxar a data atual
     if (dataInput) {
         const now = new Date();
         const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Mês é de 0 a 11, por isso somamos 1
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
         const day = now.getDate().toString().padStart(2, '0');
         dataInput.value = `${year}-${month}-${day}`;
     }
 
-    // Lógica para puxar a hora atual
+    // Lógica: Puxar a hora atual
     if (horarioInput) {
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayAutocompleteSuggestions(data);
                 })
                 .catch(error => console.error('Erro na API de Autocompletar:', error));
-        }, 500); // Debounce de 500ms
+        }, 500);
     });
     
     function displayAutocompleteSuggestions(predictions) {
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Evento de envio do formulário
+    // **NOVA LÓGICA DE ENVIO:** Agora o formulário envia os dados para o servidor Python
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -178,12 +178,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
-            console.log('Dados do formulário:', data);
-            
-            form.style.display = 'none';
-            document.getElementById('card-4').style.display = 'block';
+            // URL do seu servidor Python (para testes locais)
+            // Lembre-se de que, em produção, você precisará de um domínio real para o seu backend.
+            const pythonServerURL = 'http://127.0.0.1:5000/submit-form';
 
-            progressDots.forEach(dot => dot.classList.remove('active'));
+            fetch(pythonServerURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Dados do formulário enviados para o servidor Python:', data);
+                    form.style.display = 'none';
+                    document.getElementById('card-4').style.display = 'block';
+                    progressDots.forEach(dot => dot.classList.remove('active'));
+                } else {
+                    alert('Houve um erro ao enviar o formulário. Por favor, tente novamente.');
+                    console.error('Erro no envio do formulário:', response);
+                }
+            })
+            .catch(error => {
+                alert('Houve um erro de conexão. Verifique se o servidor Python está rodando.');
+                console.error('Erro de conexão:', error);
+            });
         } else {
             alert('Por favor, preencha todos os campos obrigatórios.');
         }
