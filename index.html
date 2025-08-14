@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Serviços</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <img src="imagens/logo.png" alt="Logo da Unidas" class="logo">
+        <form id="agendamento-form">
+            <div class="card" id="card-0">
+                <h2>Bem-vindo ao Agendamento de Serviços</h2>
+                <p>Por favor, clique em "Iniciar" para agendar seu serviço de manutenção, instalação ou orçamento.</p>
+                <div class="navigation-buttons">
+                    <button type="button" class="next-btn" data-card="1">Iniciar</button>
+                </div>
+            </div>
+            <div class="card" id="card-1" style="display: none;">
+                <h2>1. Informações do Cliente</h2>
+                <div class="input-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="input-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="0">Anterior</button>
+                    <button type="button" class="next-btn" data-card="2">Próximo</button>
+                </div>
+            </div>
+            <div class="card" id="card-2" style="display: none;">
+                <h2>2. Loja e Serviço</h2>
+                <div class="input-group">
+                    <label for="loja">Informe a Loja</label>
+                    <select id="loja" name="loja" required>
+                        <option value="" disabled selected>Selecione uma loja</option>
+                        <option value="americana">Americana</option>
+                        <option value="campinas">Campinas</option>
+                        <option value="sao-paulo">São Paulo</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="servico">Tipo de Serviço</label>
+                    <select id="servico" name="servico" required>
+                        <option value="" disabled selected>Selecione um serviço</option>
+                        <option value="manutencao">Manutenção</option>
+                        <option value="instalacao">Instalação</option>
+                        <option value="orcamento">Orçamento</option>
+                    </select>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="1">Anterior</button>
+                    <button type="button" class="next-btn" data-card="3">Próximo</button>
+                </div>
+            </div>
+            <div class="card" id="card-3" style="display: none;">
+                <h2>3. Agendamento e Localização</h2>
+                <div class="input-group">
+                    <label for="data-servico">Data do serviço</label>
+                    <input type="date" id="data-servico" name="data-servico" required>
+                </div>
+                <div class="input-group">
+                    <label for="horario-servico">Horário do serviço</label>
+                    <input type="time" id="horario-servico" name="horario-servico" required>
+                </div>
+                <div class="input-group">
+                    <label for="endereco">Sua localização</label>
+                    <input type="text" id="endereco" name="endereco" placeholder="Digite seu endereço">
+                    <button type="button" id="get-location">Usar minha localização</button>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="2">Anterior</button>
+                    <button type="submit" id="submit-form">Enviar Agendamento</button>
+                </div>
+            </div>
+            </form>
+        
+        <div class="card" id="card-4" style="display: none; text-align: center;">
+            <h2 style="color: green;">Agendamento Enviado com Sucesso! ✅</h2>
+            <p>Obrigado pelo seu agendamento. Em breve entraremos em contato para confirmar os detalhes do serviço.</p>
+            <div class="navigation-buttons">
+                <button type="button" class="home-btn">Voltar para a tela inicial</button>
+            </div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-dot active" data-card="0"></div>
+            <div class="progress-dot" data-card="1"></div>
+            <div class="progress-dot" data-card="2"></div>
+            <div class="progress-dot" data-card="3"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
