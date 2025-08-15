@@ -19,6 +19,7 @@
                 </div>
             </div>
             <div class="card" id="card-1" style="display: none;">
+                <h3>Área 1 | Estrutura de Loja</h3>
                 <h2>1. Analista</h2>
                 <div class="input-group">
                     <label for="nome">Nome Completo</label>
@@ -30,13 +31,23 @@
                 </div>
             </div>
             <div class="card" id="card-2" style="display: none;">
+            <h3>Área 1 | Estrutura de Loja</h3>
             <h2>2. Oficina</h2>
             <div class="input-group">
                 <label for="loja">Informe a Oficina</label>
                 <input type="text" id="loja" name="entry.1182615295" placeholder="Digite o nome da oficina" required>
             </div>
+             <div class="input-group">
+                <label for="servico">Tipo de Oficina</label>
+                <select id="servico" name="entry.1917208212" required>
+                    <option value="" disabled selected>Selecione um serviço</option>
+                    <option value="Preventiva">Interna</option>
+                    <option value="Corretiva">Externa</option>
+                    <option value="Sinistro">Móvel</option>
+                </select>
+            </div>
             <div class="input-group">
-                <label for="servico">Tipo de Serviço</label>
+                <label for="servico">Tipo de Serviço Realizado</label>
                 <select id="servico" name="entry.1917208212" multiple required>
                     <option value="" disabled selected>Selecione um serviço</option>
                     <option value="Preventiva">Preventiva</option>
@@ -50,7 +61,7 @@
             </div>
         </div>
             <div class="card" id="card-3" style="display: none;">
-                <h2>3. Agendamento e Localização</h2>
+                <h2>3. Data, Hora e Local</h2>
                 <div class="input-group">
                     <label for="data-visita">Data da Visita</label>
                     <input type="date" id="data-visita" name="entry.1229418063" required>
@@ -101,8 +112,8 @@
                 <div class="input-group">
                     <label>Organização interna (sem peças espalhadas, organização e controle das chaves ou descartes não realizados) estão dentro dos padrões de organização?</label>
                     <div class="navigation-buttons">
-                        <button type="button" class="sim-nao-btn" data-value="Sim" data-next="25">Sim</button>
-                        <button type="button" class="sim-nao-btn" data-value="Nao" data-next="25">Não</button>
+                        <button type="button" class="sim-nao-btn" data-value="Sim" data-next="6">Sim</button>
+                        <button type="button" class="sim-nao-btn" data-value="Nao" data-next="6">Não</button>
                     </div>
 
                     <div class="input-group">
@@ -115,6 +126,29 @@
                     <button type="button" class="prev-btn" data-card="4">Anterior</button>
                 </div>
                 <input type="hidden" id="resposta-organizacao-oficina" name="entry.2046841923">
+            </div>
+
+
+
+             <div class="card" id="card-6" style="display: none;">
+                <h2>6. Dispositivos Eletrônicos (Escritório)</h2>
+                <div class="input-group">
+                    <label>Os equipamentos de operação estão em condições de uso (computador, notebook, impressora, tablet, celular corporativo e acessos)?</label>
+                    <div class="navigation-buttons">
+                        <button type="button" class="sim-nao-btn" data-value="Sim" data-next="25">Sim</button>
+                        <button type="button" class="sim-nao-btn" data-value="Nao" data-next="25">Não</button>
+                    </div>
+
+                    <div class="input-group">
+                    <label for="comentario">Por favor, descreva o que precisa ser melhorado.</label>
+                    <textarea id="comentario" name="entry.1340495445" rows="5" placeholder="Seu comentário aqui..."></textarea>
+                    </div>
+
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="5">Anterior</button>
+                </div>
+                <input type="hidden" id="resposta-organizacao-oficina" name="entry.2079840704">
             </div>
    
             
