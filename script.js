@@ -84,9 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Verificação específica para o select de seleção múltipla
                 if (input.tagName === 'SELECT' && input.multiple) {
-                    const selectedOptions = Array.from(input.options).filter(option => option.selected);
-                    // A validação falha se nenhuma opção foi selecionada ou se a única selecionada é a vazia
-                    if (selectedOptions.length === 0 || (selectedOptions.length === 1 && selectedOptions[0].value === '')) {
+                    // Filtra apenas as opções selecionadas que têm um valor não-vazio
+                    const selectedValidOptions = Array.from(input.options).filter(option => option.selected && option.value !== '');
+                    
+                    if (selectedValidOptions.length === 0) {
                         hasValue = false;
                     }
                 } else if (!input.value) {
