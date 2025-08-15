@@ -12,25 +12,17 @@
         <img src="imagens/logo.png" alt="Logo da Unidas" class="logo">
         <form id="agendamento-form" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScJscTzMXrB8ft6qTMsEnVtnAkCE20VxImxHk_JQD2YL8fZtw/formResponse" method="POST">
             <div class="card" id="card-0">
-                <h2>Bem-vindo ao Agendamento de Serviços</h2>
-                <p>Por favor, clique em "Iniciar" para agendar seu serviço de manutenção, instalação ou orçamento.</p>
+                <h2>Bem-vindo ao Registro de Visitas</h2>
+                <p>Por favor, clique em "Iniciar" para registrar uma vista a uma Oficina.</p>
                 <div class="navigation-buttons">
                     <button type="button" class="next-btn" data-card="1">Iniciar</button>
                 </div>
             </div>
             <div class="card" id="card-1" style="display: none;">
-                <h2>1. Informações do Cliente</h2>
+                <h2>1. Analista</h2>
                 <div class="input-group">
                     <label for="nome">Nome Completo</label>
                     <input type="text" id="nome " name="entry.199118787" required>
-                </div>
-                <div class="input-group">
-                    <label for="telefone">Telefone</label>
-                    <input type="tel" id="telefone" name="telefone" required>
-                </div>
-                <div class="input-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required>
                 </div>
                 <div class="navigation-buttons">
                     <button type="button" class="prev-btn" data-card="0">Anterior</button>
@@ -38,59 +30,116 @@
                 </div>
             </div>
             <div class="card" id="card-2" style="display: none;">
-                <h2>2. Loja e Serviço</h2>
-                <div class="input-group">
-                    <label for="loja">Informe a Loja</label>
-                    <select id="loja" name="loja" required>
-                        <option value="" disabled selected>Selecione uma loja</option>
-                        <option value="americana">Americana</option>
-                        <option value="campinas">Campinas</option>
-                        <option value="sao-paulo">São Paulo</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="servico">Tipo de Serviço</label>
-                    <select id="servico" name="servico" required>
-                        <option value="" disabled selected>Selecione um serviço</option>
-                        <option value="manutencao">Manutenção</option>
-                        <option value="instalacao">Instalação</option>
-                        <option value="orcamento">Orçamento</option>
-                    </select>
-                </div>
-                <div class="navigation-buttons">
-                    <button type="button" class="prev-btn" data-card="1">Anterior</button>
-                    <button type="button" class="next-btn" data-card="3">Próximo</button>
-                </div>
+            <h2>2. Oficina</h2>
+            <div class="input-group">
+                <label for="loja">Informe a Oficina</label>
+                <input type="text" id="loja" name="entry.1182615295" placeholder="Digite o nome da oficina" required>
             </div>
+            <div class="input-group">
+                <label for="servico">Tipo de Serviço</label>
+                <select id="servico" name="entry.1917208212" multiple required>
+                    <option value="" disabled selected>Selecione um serviço</option>
+                    <option value="Preventiva">Preventiva</option>
+                    <option value="Corretiva">Corretiva</option>
+                    <option value="Sinistro">Sinistro</option>
+                </select>
+            </div>
+            <div class="navigation-buttons">
+                <button type="button" class="prev-btn" data-card="1">Anterior</button>
+                <button type="button" class="next-btn" data-card="3">Próximo</button>
+            </div>
+        </div>
             <div class="card" id="card-3" style="display: none;">
                 <h2>3. Agendamento e Localização</h2>
                 <div class="input-group">
-                    <label for="data-servico">Data do serviço</label>
-                    <input type="date" id="data-servico" name="data-servico" required>
+                    <label for="data-servico">Data da Visita</label>
+                    <input type="date" id="data-servico" name="entry.1229418063" required>
                 </div>
                 <div class="input-group">
-                    <label for="horario-servico">Horário do serviço</label>
-                    <input type="time" id="horario-servico" name="horario-servico" required>
+                    <label for="horario-servico">Horário da Visita</label>
+                    <input type="time" id="horario-servico" name="entry.237612808" required>
                 </div>
                 <div class="input-group">
                     <label for="endereco">Sua localização</label>
-                    <input type="text" id="endereco" name="endereco" placeholder="Digite seu endereço">
+                    <input type="text" id="endereco" name="entry.421378953" placeholder="Digite seu endereço">
                     <button type="button" id="get-location">Usar minha localização</button>
                     <input type="hidden" id="latitude" name="latitude">
                     <input type="hidden" id="longitude" name="longitude">
                 </div>
                 <div class="navigation-buttons">
                     <button type="button" class="prev-btn" data-card="2">Anterior</button>
-                    <button type="submit" id="submit-form">Enviar Agendamento</button>
+                    <button type="button" class="next-btn" data-card="4">Próximo</button>
+                    
                 </div>
             </div>
+
+            <div class="card" id="card-4" style="display: none;">
+                <h2>4. Estrutura da Oficina</h2>
+                <div class="input-group">
+                    <label>De forma geral, a sala de frotas está em bom estado de conservação (sala limpa, iluminação, pintura adequada, paredes sem manchas)?</label>
+                    <div class="navigation-buttons">
+                        <button type="button" class="sim-nao-btn" data-value="Sim" data-next="5">Sim</button>
+                        <button type="button" class="sim-nao-btn" data-value="Nao" data-next="5">Não</button>
+                    </div>
+
+                    <div class="input-group">
+                    <label for="comentario">Por favor, descreva o que precisa ser melhorado.</label>
+                    <textarea id="comentario" name="entry.1527327713" rows="5" placeholder="Seu comentário aqui..."></textarea>
+                    </div>
+
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="3">Anterior</button>
+                </div>
+                <input type="hidden" id="resposta-sala-oficina" name="entry.1349082127">
+            </div>
+
+
+
+            <div class="card" id="card-5" style="display: none;">
+                <h2>5. Organização da Oficina</h2>
+                <div class="input-group">
+                    <label>Organização interna (sem peças espalhadas, organização e controle das chaves ou descartes não realizados) estão dentro dos padrões de organização?</label>
+                    <div class="navigation-buttons">
+                        <button type="button" class="sim-nao-btn" data-value="Sim" data-next="25">Sim</button>
+                        <button type="button" class="sim-nao-btn" data-value="Nao" data-next="25">Não</button>
+                    </div>
+
+                    <div class="input-group">
+                    <label for="comentario">Por favor, descreva o que precisa ser melhorado.</label>
+                    <textarea id="comentario" name="entry.1430979870" rows="5" placeholder="Seu comentário aqui..."></textarea>
+                    </div>
+
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" data-card="4">Anterior</button>
+                </div>
+                <input type="hidden" id="resposta-organizacao-oficina" name="entry.2046841923">
+            </div>
+   
+            
+
+           
+
+
+
+
+            
+            
+
+            <div class="card" id="card-25" style="display: none;">
+                <button type="button" class="prev-btn" data-card="5">Anterior</button>
+                <button type="submit" id="submit-form">Enviar Registro</button>
+            </div>
+
             </form>
         
-        <div class="card" id="card-4" style="display: none; text-align: center;">
-            <h2 style="color: green;">Agendamento Enviado com Sucesso! ✅</h2>
-            <p>Obrigado pelo seu agendamento. Em breve entraremos em contato para confirmar os detalhes do serviço.</p>
+        <div class="card" id="card-10" style="display: none;">
+            <h2 style="color: green;">Registro Enviado com Sucesso! ✅</h2>
+            <p>Obrigado pelo seu Registro.</p>
             <div class="navigation-buttons">
-                <button type="button" class="home-btn">Voltar para a tela inicial</button>
+                <button type="button" class="home-btn">Inserir Novo Registro</button>
+                <button type="button" class="prev-btn" data-card="25">Anterior</button>
             </div>
         </div>
         <div class="progress-bar-container">

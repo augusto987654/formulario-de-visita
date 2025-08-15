@@ -43,6 +43,7 @@ h2 {
 /* Estilos dos campos de entrada */
 .input-group {
     margin-bottom: 15px;
+    text-align: center;
 }
 
 label {
@@ -129,4 +130,26 @@ button {
         padding: 10px;
         border-radius: 0;
     }
+}
+
+.sim-nao-btn {
+    padding: 15px 50px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 15px;
+}
+
+
+.sim-nao-btn:hover {
+    background-color: #b30000;
+}
+
+#card-4 .input-group textarea,
+#card-5 .input-group textarea{
+    width: 100%;
 }

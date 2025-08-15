@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const longitudeInput = document.getElementById('longitude');
     const autocompleteList = document.createElement('ul');
     autocompleteList.id = 'autocomplete-list';
-    enderecoInput.parentNode.appendChild(autocompleteList);
+    if (enderecoInput) {
+        enderecoInput.parentNode.appendChild(autocompleteList);
+    }
 
     // Elementos de data e horário
     const dataInput = document.getElementById('data-servico');
@@ -21,23 +23,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCardIndex = 0;
 
     // Função para mostrar o cartão atual e esconder os outros
-    const showCard = (index) => {
+    const showCard = (cardId) => {
+        let newIndex = 0;
         cards.forEach((card, i) => {
-            card.style.display = i === index ? 'block' : 'none';
+            if (card.id === `card-${cardId}`) {
+                card.style.display = 'block';
+                newIndex = i;
+            } else {
+                card.style.display = 'none';
+            }
         });
 
         // Atualiza a barra de progresso
         progressDots.forEach((dot, i) => {
-            if (i === index) {
+            if (i === newIndex) {
                 dot.classList.add('active');
             } else {
                 dot.classList.remove('active');
             }
         });
+        currentCardIndex = newIndex;
     };
 
     // Inicia mostrando o primeiro cartão (índice 0)
-    showCard(currentCardIndex);
+    showCard(0);
 
     // Lógica: Puxar a data atual
     if (dataInput) {
@@ -59,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Eventos dos botões "Próximo"
     nextButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const nextCardIndex = parseInt(button.dataset.card, 10);
+            const nextCardId = button.dataset.card;
             
             if (currentCardIndex === 0) {
-                currentCardIndex = nextCardIndex;
-                showCard(currentCardIndex);
+                showCard(nextCardId);
                 return;
             }
             
@@ -81,8 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (isValid) {
-                currentCardIndex = nextCardIndex;
-                showCard(currentCardIndex);
+                showCard(nextCardId);
             } else {
                 alert('Por favor, preencha todos os campos obrigatórios.');
             }
@@ -92,23 +99,85 @@ document.addEventListener('DOMContentLoaded', () => {
     // Eventos dos botões "Anterior"
     prevButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const prevCardIndex = parseInt(button.dataset.card, 10);
-            currentCardIndex = prevCardIndex;
-            showCard(currentCardIndex);
+            const prevCardId = button.dataset.card;
+            showCard(prevCardId);
         });
     });
 
-    // Lógica para o botão de geolocalização
+    
+    // Lógica para os botões "Sim" e "Não"
+    const simNaoButtons = document.querySelectorAll('.sim-nao-btn');
+    if (simNaoButtons.length > 0) {
+        simNaoButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const resposta = this.getAttribute('data-value');
+                const proximoCardId = this.getAttribute('data-next');
+                
+                // Encontra o card pai do botão clicado
+                const currentCard = this.closest('.card');
+                
+                // Encontra a textarea e o input hidden dentro do card atual
+                const comentarioInput = currentCard.querySelector('textarea');
+                const hiddenInput = currentCard.querySelector('input[type="hidden"]');
+                
+                // Lógica de validação: obrigatório apenas para a resposta "Não"
+                if (resposta === 'Nao') {
+                    if (!comentarioInput.value.trim()) {
+                        alert('Por favor, descreva o que precisa ser melhorado para poder continuar.');
+                        comentarioInput.style.border = '1px solid red';
+                        return; // Impede o avanço do cartão
+                    } else {
+                        comentarioInput.style.border = '';
+                    }
+                }
+
+                // Preenche o valor do input hidden (sempre)
+                if (hiddenInput) {
+                    hiddenInput.value = resposta;
+                }
+
+                // Avança para o próximo card
+                showCard(proximoCardId);
+            });
+        });
+    }
+
+    // LÓGICA PARA O BOTÃO DE GEOLOCALIZAÇÃO
     if (getLocationButton) {
         getLocationButton.addEventListener('click', () => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
+                        
+                        // Preenche os campos de latitude e longitude
                         latitudeInput.value = latitude;
                         longitudeInput.value = longitude;
-                        enderecoInput.value = 'Localização obtida automaticamente';
-                        alert('Localização obtida com sucesso! Você pode editar o endereço se necessário.');
+
+                        // Exibe uma mensagem de carregamento enquanto busca o endereço
+                        enderecoInput.value = 'Buscando endereço...';
+
+                        // Usa uma API de geocodificação reversa para obter o endereço completo
+                        const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&zoom=18`;
+
+                        fetch(nominatimUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.display_name) {
+                                    enderecoInput.value = data.display_name;
+                                    alert('Localização obtida com sucesso!');
+                                } else {
+                                    // Caso a API retorne algo mas sem o nome do endereço
+                                    enderecoInput.value = 'Endereço não encontrado';
+                                    alert('Localização obtida, mas o endereço completo não foi encontrado.');
+                                }
+                            })
+                            .catch(error => {
+                                // Em caso de erro na requisição da API
+                                console.error('Erro na API de geocodificação reversa:', error);
+                                enderecoInput.value = 'Erro ao buscar o endereço';
+                                alert('Não foi possível obter o endereço. Por favor, digite manualmente.');
+                            });
                     },
                     (error) => {
                         console.error('Erro ao obter a localização:', error);
@@ -121,26 +190,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Lógica de Autocompletar com OpenStreetMap Nominatim
+    // Lógica de Autocompletar
     let autocompleteTimeout = null;
-    enderecoInput.addEventListener('input', () => {
-        clearTimeout(autocompleteTimeout);
-        const query = enderecoInput.value;
+    if (enderecoInput) {
+        enderecoInput.addEventListener('input', () => {
+            clearTimeout(autocompleteTimeout);
+            const query = enderecoInput.value;
 
-        if (query.length < 3) {
-            autocompleteList.innerHTML = '';
-            return;
-        }
+            if (query.length < 3) {
+                autocompleteList.innerHTML = '';
+                return;
+            }
 
-        autocompleteTimeout = setTimeout(() => {
-            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5&countrycodes=br`)
-                .then(response => response.json())
-                .then(data => {
-                    displayAutocompleteSuggestions(data);
-                })
-                .catch(error => console.error('Erro na API de Autocompletar:', error));
-        }, 500);
-    });
+            autocompleteTimeout = setTimeout(() => {
+                fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5&countrycodes=br`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayAutocompleteSuggestions(data);
+                    })
+                    .catch(error => console.error('Erro na API de Autocompletar:', error));
+            }, 500);
+        });
+    }
     
     function displayAutocompleteSuggestions(predictions) {
         autocompleteList.innerHTML = '';
@@ -157,8 +228,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // A lógica de envio via JavaScript foi removida.
-    // O formulário agora será enviado diretamente para o Google Forms pelo HTML.
+    // LÓGICA DE ENVIO DO FORMULÁRIO
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Impede o envio padrão do formulário
+
+            const formData = new FormData(form);
+            const formUrl = form.action;
+
+            fetch(formUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            })
+            .then(response => {
+                // Exibe a tela de sucesso personalizada (card-10)
+                showCard(10);
+            })
+            .catch(error => {
+                console.error('Erro ao enviar o formulário:', error);
+                alert('Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.');
+            });
+        });
+    }
 
     const homeButton = document.querySelector('.home-btn');
     if (homeButton) {
