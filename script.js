@@ -80,7 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
             let isValid = true;
             
             inputs.forEach(input => {
-                if (!input.value) {
+                let hasValue = true;
+                
+                // Verificação específica para o select de seleção múltipla
+                if (input.tagName === 'SELECT' && input.multiple) {
+                    const selectedOptions = Array.from(input.options).filter(option => option.selected);
+                    // A validação falha se nenhuma opção foi selecionada ou se a única selecionada é a vazia
+                    if (selectedOptions.length === 0 || (selectedOptions.length === 1 && selectedOptions[0].value === '')) {
+                        hasValue = false;
+                    }
+                } else if (!input.value) {
+                    // Validação padrão para outros inputs (text, date, time, etc.)
+                    hasValue = false;
+                }
+
+                if (!hasValue) {
                     isValid = false;
                     input.style.border = '1px solid red';
                 } else {
