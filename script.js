@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Elementos de data e horário
-    const dataInput = document.getElementById('data-servico');
-    const horarioInput = document.getElementById('horario-servico');
+    const dataInput = document.getElementById('data-visita');
+    const horarioInput = document.getElementById('horario-visita');
 
     let currentCardIndex = 0;
 
